@@ -1,3 +1,7 @@
+/**
+ * Contributors: Skyhawk, Fireball, BigDiesel
+ */
+
 #include "fog.as"
 
 class script {
