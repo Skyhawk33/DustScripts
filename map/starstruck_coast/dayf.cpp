@@ -6,8 +6,8 @@
 
 class script {
     scene@ g;
-	
-	int counter = 0;
+    
+    int counter = 0;
 
     [boolean|tooltip:"Whether or not the script handles sublayers.\nDisable if not needed."]
     bool use_sublayers = false;
@@ -45,9 +45,9 @@ class script {
         //double second = counter2;
         
         camera@ cam = get_camera(0);
-		timedate@ time = localtime();
-		double second = time.hour() + time.min()/60.0 + time.sec()/3600.0;
-		
+        timedate@ time = localtime();
+        double second = time.hour() + time.min()/60.0 + time.sec()/3600.0;
+        
         fog_setting@ currentFog = null;
         fog_setting@ nextFog = null;
         double lerp_ratio = 0;
@@ -137,12 +137,12 @@ class script {
         fog_setting@ evening_settings;
         fog_setting@ midnight_settings;
 
-		get_fog_setting(entity_by_id(midday_fog), midday_settings, temp_speed, temp_size);
-		get_fog_setting(entity_by_id(afternoon_fog), afternoon_settings, temp_speed, temp_size);
-		get_fog_setting(entity_by_id(sunset_fog), sunset_settings, temp_speed, temp_size);
-		get_fog_setting(entity_by_id(dusk_fog), dusk_settings, temp_speed, temp_size);
-		get_fog_setting(entity_by_id(evening_fog), evening_settings, temp_speed, temp_size);
-		get_fog_setting(entity_by_id(midnight_fog), midnight_settings, temp_speed, temp_size);
+        get_fog_setting(entity_by_id(midday_fog), midday_settings, temp_speed, temp_size);
+        get_fog_setting(entity_by_id(afternoon_fog), afternoon_settings, temp_speed, temp_size);
+        get_fog_setting(entity_by_id(sunset_fog), sunset_settings, temp_speed, temp_size);
+        get_fog_setting(entity_by_id(dusk_fog), dusk_settings, temp_speed, temp_size);
+        get_fog_setting(entity_by_id(evening_fog), evening_settings, temp_speed, temp_size);
+        get_fog_setting(entity_by_id(midnight_fog), midnight_settings, temp_speed, temp_size);
         
         //make sure the array is empty, then insert the settings
         //I couldnt find a nicer syntax to set fixed contents of an array in the documentation
@@ -153,31 +153,31 @@ class script {
         
         fog_time();
     }
-	
-	void checkpoint_load() {
+    
+    void checkpoint_load() {
         fog_time();
     }
     
-	void step(int entities) {
-		counter++;
-		if (counter >= PERIOD) {
-			counter = 0;
+    void step(int entities) {
+        counter++;
+        if (counter >= PERIOD) {
+            counter = 0;
             
             ///int start = get_time_us();
-			
+            
             fog_time();
             
             //int end = get_time_us();
             //puts(""+(end-start)/1000.0+" ms");
-		}
-	}
+        }
+    }
 
     void draw_bordered_text(textfield@ tf, int fog_id, string text, uint color) {
         entity@ e = entity_by_id(fog_id);
         if(@e != null) {
             tf.text(text);
             tf.colour(color);
-			
+            
             tf.draw_world(22, 1, e.x(), e.y()-15, 1, 1, 0);
             
             tf.colour(0xFFFFFFFF);

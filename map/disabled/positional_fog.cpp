@@ -2,41 +2,41 @@ class script {
 }
 
 class fog_trigger : trigger_base {
-	[entity] int fog_trigger_id = -1;
-	scene@ g;
-	scripttrigger@ self;
-	
-	
-	void init(script@ s, scripttrigger@ st) {
-		@g = get_scene();
-		@self = st;
-	}
-	
-	void editor_draw(float sf) {
-		entity@ fog = entity_by_id(fog_trigger_id);
-		if(fog !is null and fog.type_name() != "fog_trigger")
-			@fog = null;
-		
-		if(fog !is null)
-			g.draw_line_world(21, 1, self.x(), self.y(), fog.x(), fog.y(), 3, 0xFFFF0000);
-	}
-	
-	void activate(controllable@ e) {
-		entity@ fog = entity_by_id(fog_trigger_id);
-		if(fog !is null and fog.type_name() != "fog_trigger")
-			@fog = null;
-		
-		
-		if (e.as_dustman() !is null and fog !is null) {
-			
-			fog_setting@ setting = null;
-			float speed = 0;
-			int size = 0;
-			get_fog_setting(@fog, @setting, speed, size);
-			
-			get_active_camera().change_fog(@setting, speed);
-		}
-	}
+    [entity] int fog_trigger_id = -1;
+    scene@ g;
+    scripttrigger@ self;
+    
+    
+    void init(script@ s, scripttrigger@ st) {
+        @g = get_scene();
+        @self = st;
+    }
+    
+    void editor_draw(float sf) {
+        entity@ fog = entity_by_id(fog_trigger_id);
+        if(fog !is null and fog.type_name() != "fog_trigger")
+            @fog = null;
+        
+        if(fog !is null)
+            g.draw_line_world(21, 1, self.x(), self.y(), fog.x(), fog.y(), 3, 0xFFFF0000);
+    }
+    
+    void activate(controllable@ e) {
+        entity@ fog = entity_by_id(fog_trigger_id);
+        if(fog !is null and fog.type_name() != "fog_trigger")
+            @fog = null;
+        
+        
+        if (e.as_dustman() !is null and fog !is null) {
+            
+            fog_setting@ setting = null;
+            float speed = 0;
+            int size = 0;
+            get_fog_setting(@fog, @setting, speed, size);
+            
+            get_active_camera().change_fog(@setting, speed);
+        }
+    }
 }
 
 /**

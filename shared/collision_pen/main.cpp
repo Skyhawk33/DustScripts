@@ -16,7 +16,7 @@ class script: callback_base {
     
     //--Play Vars--
     int num_players;
-	array <dustman@> players;
+    array <dustman@> players;
     
     Line controllable_line;
     Line surface_line;
@@ -29,26 +29,26 @@ class script: callback_base {
     [hidden] NodePath np;
     [text] bool clear_nodes = false;
 
-	script() {
-		@g = get_scene();
-		
+    script() {
+        @g = get_scene();
+        
         num_players = num_cameras();
-		players.resize(num_players);
-	}
+        players.resize(num_players);
+    }
 
-	void step(int entities) {
-		//if no players are defined, get the players
-		if(@players[0] == null){
-			for(uint i=0; i < players.length(); i++) {
-				controllable@ c = controller_controllable(i);
-				if(@c != null){
-					@players[i] = c.as_dustman();
+    void step(int entities) {
+        //if no players are defined, get the players
+        if(@players[0] == null){
+            for(uint i=0; i < players.length(); i++) {
+                controllable@ c = controller_controllable(i);
+                if(@c != null){
+                    @players[i] = c.as_dustman();
                     players[i].set_collision_handler(this, "custom_collision", 0);
                     players[i].on_subframe_end_callback(this, "subframe_step", 0);
-				}
-			}
-		}
-	}
+                }
+            }
+        }
+    }
     
     void subframe_step(dustman@ dm, int) {
         //puts("\tSubframe End");
@@ -94,11 +94,11 @@ class script: callback_base {
         
         ec.check_collision(@tc, side, moving, snap_offset);
     }
-	
-	void checkpoint_load() {
-		for(uint i=0; i< players.length(); i++)
-			@players[i] = null;
-	}
+    
+    void checkpoint_load() {
+        for(uint i=0; i< players.length(); i++)
+            @players[i] = null;
+    }
     
     void editor_step() {
         if(@ed == null) {
