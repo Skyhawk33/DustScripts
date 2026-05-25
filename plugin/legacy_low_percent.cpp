@@ -3,7 +3,8 @@ const int FADE_MAX = 60;
 class script : callback_base {
     scene@ g;
     dustman@ player;
-    int offset = 0;
+    int frame_discarded = 0;
+    int discarded = 0;
     int cleaned_save = 0;
     int total_cleaned = 0;
     int fadeout = -40;
@@ -28,8 +29,10 @@ class script : callback_base {
             if (@e != null)
                 @player = e.as_dustman();
         }
-        if(!level_ended && player !is null)
+        if(!level_ended && player !is null) {
             total_cleaned = player.total_cleaned();
+            frame_discarded = discarded;
+        }
     }
     
     void step_fixed() {
@@ -48,16 +51,19 @@ class script : callback_base {
         txt.set_font("sans_bold", 20);
         txt.text("CLEANED");
         txt.draw_hud(0, 0, -740, 220, 1, 1, -15);
-        txt.text(""+(total_cleaned-offset));
+        txt.text(""+(total_cleaned-discarded));
         txt.align_horizontal(0);
         txt.set_font("sans_bold", 36);
         txt.draw_hud(0, 0, -690, 260, 1, 1, 0);
     }
     
     void checkpoint_save() {
-        if(player !is null && player.dead())
-            offset += player.total_cleaned() - offset - cleaned_save;
-        cleaned_save = player.total_cleaned() - offset;
+        if(player is null)
+            return;
+        if(player.dead())
+            discarded = player.total_cleaned() - cleaned_save; // hitting a checkpoint while dead causes any unsaved dust to be discarded
+        else
+            cleaned_save = player.total_cleaned() - discarded; // hitting a checkpoint while alive saves any undiscarded dust
     }
     
     void checkpoint_load() {
@@ -65,15 +71,16 @@ class script : callback_base {
     }
     
     void on_level_end() {
+        discarded = frame_discarded; // the end trigger respawn itself counts as a checkpoint_save, which needs to be ignored
         if(player !is null && !player.dead())
-            total_cleaned = player.total_cleaned();
-        g.plugin_score(total_cleaned-offset);
+            total_cleaned = player.total_cleaned(); // if the player was alive during the final attack, it counts
+        g.plugin_score(total_cleaned-discarded);
         level_ended = true;
     }
     
     bool plugin_get_score_line() {
         if (score_displayed) return false;
-        g.plugin_set_score_line("CLEANED", ""+(total_cleaned-offset));
+        g.plugin_set_score_line("CLEANED", ""+(total_cleaned-discarded));
         score_displayed = true;
         return true;
     }
